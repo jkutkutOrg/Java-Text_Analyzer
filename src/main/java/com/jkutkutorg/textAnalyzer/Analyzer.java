@@ -71,7 +71,7 @@ public class Analyzer {
         }
         return null;
     }
-
+    
     private static boolean isValidMode(String mode) {
         for (String option : OPTIONS)
             if (option.equals(mode))
