@@ -18,7 +18,7 @@ public class Analyzer {
     public static final String LETTERS = "-l";
     public static final String NUMBERS = "-n";
 
-    private static final String[] OPTIONS = {VOWELS, CONSONANTS, LETTERS, NUMBERS};
+    public static final String[] OPTIONS = {VOWELS, CONSONANTS, LETTERS, NUMBERS};
 
     private static final int MODE_ARG = 0;
     private static final int FILE_IN_ARG = 1;

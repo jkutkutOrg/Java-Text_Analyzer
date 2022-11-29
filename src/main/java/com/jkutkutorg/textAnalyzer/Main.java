@@ -1,5 +1,7 @@
 package com.jkutkutorg.textAnalyzer;
 
+import jkutkut.SuperScanner;
+
 import java.io.*;
 import java.util.Scanner;
 
@@ -9,17 +11,16 @@ public class Main {
 //    public static String jaimeEjec = "~/.jdks/corretto-18.0.2/lib/jexec";
 //    public static String jaimeEjec = "/home/jkutkut/.jdks/corretto-18.0.2/lib/jexec";
 
-    private static Scanner userInput;
+    private static SuperScanner userInput;
     public static void main(String[] args) {
         try { // TODO reduce try-catch scope
-            userInput = new Scanner(System.in);
+            userInput = new SuperScanner.Es(System.in);
 
-            System.out.println("Introduce el modo"); // TODO data validation
-            String modo = userInput.nextLine();
-            System.out.println("Introduce el nombre del archivo del que se toman los datos");
-            String archivoLectura = userInput.nextLine();
-            System.out.println("Introduce como quieres que se llame el archivo de salida");
-            String archivoSalida = userInput.nextLine();
+            // TODO Result of all analysis
+            System.out.println("Introduce los datos para el analyzer:");
+            String modo = userInput.getStringIn("Introduce el modo: ", Analyzer.OPTIONS);
+            String archivoLectura = userInput.getFileName("Archivo a analizar: ");
+            String archivoSalida = userInput.getString("Archivo de salida: ", 1, Integer.MAX_VALUE);
 
 //            ProcessBuilder pb = new ProcessBuilder(jaimeEjec, "/home/jaime/Documentos/WorkSpacePSP/Java-Text_Analyzer/jars/hijo.jar",modo,archivoLectura,archivoSalida);
             ProcessBuilder pb = new ProcessBuilder(
@@ -31,9 +32,9 @@ public class Main {
 
             // Arreglo de linux para subprocesos (visto y hablado en clase).
             pb.inheritIO()
-                    .redirectInput(ProcessBuilder.Redirect.PIPE)
-                    .redirectError(ProcessBuilder.Redirect.PIPE)
-                    .redirectOutput(ProcessBuilder.Redirect.PIPE);
+                .redirectInput(ProcessBuilder.Redirect.PIPE)
+                .redirectError(ProcessBuilder.Redirect.PIPE)
+                .redirectOutput(ProcessBuilder.Redirect.PIPE);
 
             Process hijo = pb.start();
 
