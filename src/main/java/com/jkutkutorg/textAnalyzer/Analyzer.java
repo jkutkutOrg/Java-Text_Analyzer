@@ -37,8 +37,9 @@ public class Analyzer {
      * @param args Arguments passed to the program
      */
     public static void main(String[] args) {
+        // TODO option where output is printed instead of written to file
         if (args.length != 3) {
-            System.err.println("Usage: java Analyzer <mode> <file_in> <file_out>");
+            System.err.println("Usage: analyzer.jar <mode> <file_in> <file_out>");
             System.exit(FAILURE);
         }
         if (!isValidMode(args[MODE_ARG])) {
