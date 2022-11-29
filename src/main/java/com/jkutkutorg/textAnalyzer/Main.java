@@ -1,8 +1,53 @@
 package com.jkutkutorg.textAnalyzer;
 
-public class Main {
+import java.io.*;
+import java.util.Scanner;
 
+public class Main {
+    public static String jaimeEjec = "/snap/eclipse/61/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_17.0.3.v20220515-1416/jre/lib/jexec";
+    static Scanner sc;
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        try {
+            sc = new Scanner(System.in);
+
+            System.out.println("Introduce el modo");
+            String modo = sc.nextLine();
+
+            System.out.println("Introduce el nombre del archivo del que se toman los datos");
+            String archivoLectura = sc.nextLine();
+            System.out.println("Introduce como quieres que se llame el archivo de salida");
+            String archivoSalida = sc.nextLine();
+
+
+            ProcessBuilder pb = new ProcessBuilder("comando ejecucion jar", "ruta jar",modo,archivoLectura,archivoSalida);
+            pb.inheritIO().redirectInput(ProcessBuilder.Redirect.PIPE).redirectOutput(ProcessBuilder.Redirect.PIPE);
+
+            Process hijo = pb.start();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(hijo.getInputStream()));
+
+
+            String error = String.valueOf(new InputStreamReader(hijo.getErrorStream()));
+
+
+            PrintStream ps = new PrintStream(hijo.getOutputStream());
+
+            if(error != null) {
+
+                while (br.readLine() != null) {
+                    System.out.println(br.readLine());
+                }
+            }
+            else System.out.println(error);
+
+            System.out.println("**FIN**");
+
+            sc.close();
+
+        } catch (IOException e) {
+            System.out.println("IOException");
+        }
+
+
     }
 }
