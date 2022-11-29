@@ -19,7 +19,7 @@ public class Main {
             String archivoSalida = sc.nextLine();
 
 
-            ProcessBuilder pb = new ProcessBuilder("comando ejecucion jar", "ruta jar",modo,archivoLectura,archivoSalida);
+            ProcessBuilder pb = new ProcessBuilder(jaimeEjec, "/home/jaime/Documentos/WorkSpacePSP/Java-Text_Analyzer/jars/hijo.jar",modo,archivoLectura,archivoSalida);
             pb.inheritIO().redirectInput(ProcessBuilder.Redirect.PIPE).redirectOutput(ProcessBuilder.Redirect.PIPE);
 
             Process hijo = pb.start();
@@ -27,18 +27,18 @@ public class Main {
             BufferedReader br = new BufferedReader(new InputStreamReader(hijo.getInputStream()));
 
 
-            String error = String.valueOf(new InputStreamReader(hijo.getErrorStream()));
+            String error = (hijo.getErrorStream()).toString();
+
+            if (error != null) {
 
 
-            PrintStream ps = new PrintStream(hijo.getOutputStream());
-
-            if(error != null) {
-
-                while (br.readLine() != null) {
-                    System.out.println(br.readLine());
-                }
+                PrintStream ps = new PrintStream(hijo.getOutputStream());
+                ps.flush();
+                System.out.println(br.readLine());
             }
-            else System.out.println(error);
+            else{
+                System.out.println(error);
+            }
 
             System.out.println("**FIN**");
 
