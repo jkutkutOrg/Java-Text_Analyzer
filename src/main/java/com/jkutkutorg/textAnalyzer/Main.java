@@ -13,29 +13,29 @@ public class Main {
 
     private static SuperScanner userInput;
     public static void main(String[] args) {
-        try { // TODO reduce try-catch scope
-            userInput = new SuperScanner.Es(System.in);
+        userInput = new SuperScanner.Es(System.in);
 
-            // TODO Result of all analysis
-            System.out.println("Introduce los datos para el analyzer:");
-            String modo = userInput.getStringIn("Introduce el modo: ", Analyzer.OPTIONS);
-            String archivoLectura = userInput.getFileName("Archivo a analizar: ");
-            String archivoSalida = userInput.getString("Archivo de salida: ", 1, Integer.MAX_VALUE);
+        // TODO Result of all analysis
+        System.out.println("Introduce los datos para el analyzer:");
+        String modo = userInput.getStringIn("Introduce el modo: ", Analyzer.OPTIONS);
+        String archivoLectura = userInput.getFileName("Archivo a analizar: ");
+//        String archivoSalida = userInput.getString("Archivo de salida: ", 1, Integer.MAX_VALUE);
 
 //            ProcessBuilder pb = new ProcessBuilder(jaimeEjec, "/home/jaime/Documentos/WorkSpacePSP/Java-Text_Analyzer/jars/hijo.jar",modo,archivoLectura,archivoSalida);
-            ProcessBuilder pb = new ProcessBuilder(
-                    "/home/jkutkut/.jdks/corretto-18.0.2/bin/java",
-                    "-cp", "jars/hijo.jar",
-                    "com.jkutkutorg.textAnalyzer.Analyzer",
-                    modo, archivoLectura, archivoSalida
-            );
+        ProcessBuilder pb = new ProcessBuilder(
+            "/home/jkutkut/.jdks/corretto-18.0.2/bin/java",
+            "-cp", "jars/hijo.jar",
+            "com.jkutkutorg.textAnalyzer.Analyzer",
+            modo, archivoLectura, Analyzer.STD_OUTPUT
+        );
 
-            // Arreglo de linux para subprocesos (visto y hablado en clase).
-            pb.inheritIO()
-                .redirectInput(ProcessBuilder.Redirect.PIPE)
-                .redirectError(ProcessBuilder.Redirect.PIPE)
-                .redirectOutput(ProcessBuilder.Redirect.PIPE);
+        // Arreglo de linux para subprocesos (visto y hablado en clase).
+        pb.inheritIO()
+            .redirectInput(ProcessBuilder.Redirect.PIPE)
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .redirectOutput(ProcessBuilder.Redirect.PIPE);
 
+        try { // TODO reduce try-catch scope
             Process hijo = pb.start();
 
             Scanner output = new Scanner(hijo.getInputStream());
@@ -48,7 +48,7 @@ public class Main {
                 }
             }
             else {
-                System.out.println("Child element executed correctly");
+                System.out.println("Child element output:");
                 while (output.hasNextLine()) {
                     System.out.println(output.nextLine());
                 }

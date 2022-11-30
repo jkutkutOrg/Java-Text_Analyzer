@@ -24,6 +24,8 @@ public class Analyzer {
     private static final int FILE_IN_ARG = 1;
     private static final int FILE_OUT_ARG = 2;
 
+    public static final String STD_OUTPUT = "STD_OUT";
+
     private static final Predicate<Character>[] FTS = new Predicate[] {
             c -> inArray((Character) c, "aeiouy"),
             c -> inArray((Character) c, "bcdfghjklmnpqrstvwxz"),
@@ -33,13 +35,13 @@ public class Analyzer {
 
     /**
      * Usage:
-     * java -jar textAnalyzer.jar -[v|c|l|n] &lt;file_in> &lt;file_out>
+     * java -jar textAnalyzer.jar -[v|c|l|n] &lt;file_in> &lt;file_out|STD_OUT>
      * @param args Arguments passed to the program
      */
     public static void main(String[] args) {
         // TODO option where output is printed instead of written to file
         if (args.length != 3) {
-            System.err.println("Usage: analyzer.jar <mode> <file_in> <file_out>");
+            System.err.println("Usage: analyzer.jar <mode> <file_in> <file_out" + STD_OUTPUT + ">");
             System.exit(FAILURE);
         }
         if (!isValidMode(args[MODE_ARG])) {
@@ -54,10 +56,16 @@ public class Analyzer {
         String fileName = args[FILE_IN_ARG];
         try (
             BufferedReader br = new BufferedReader(new FileReader(fileName));
-            BufferedWriter bw = new BufferedWriter(new FileWriter(args[FILE_OUT_ARG]))
         ) {
             int count = analyze(br, mode);
-            bw.write(String.valueOf(count));
+
+            if (args[FILE_OUT_ARG].equals(STD_OUTPUT))
+                System.out.println(count);
+            else {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(args[FILE_OUT_ARG]));
+                bw.write(String.valueOf(count));
+                bw.close();
+            }
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + fileName);
             System.exit(FAILURE);
