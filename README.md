@@ -14,8 +14,8 @@ Program to analyze different properties of a text file.
 - Use of Lambda expressions to generalize the logic of the analyzer.
 - Analyzer able to work both as a child process and as a standalone script.
 - Analyzer can send result to stdout or to a file.
+- Data validation of all inputs given by the user.
 
 TODO
 
-- Data validation of all inputs given by the user.
 - Docker environment to run the program.

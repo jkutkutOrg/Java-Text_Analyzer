@@ -19,6 +19,7 @@ public class Analyzer {
     public static final String NUMBERS = "-n";
 
     public static final String[] OPTIONS = {VOWELS, CONSONANTS, LETTERS, NUMBERS};
+    public static final String[] OPTIONS_NAMES = {"Vocales", "Consonantes", "Letras", "Números"};
 
     private static final int MODE_ARG = 0;
     private static final int FILE_IN_ARG = 1;
@@ -39,7 +40,6 @@ public class Analyzer {
      * @param args Arguments passed to the program
      */
     public static void main(String[] args) {
-        // TODO option where output is printed instead of written to file
         if (args.length != 3) {
             System.err.println("Usage: analyzer.jar <mode> <file_in> <file_out" + STD_OUTPUT + ">");
             System.exit(FAILURE);
