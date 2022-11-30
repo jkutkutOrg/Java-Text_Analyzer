@@ -10,13 +10,15 @@ import java.util.Scanner;
  * ~/.jdks/corretto-18.0.2/bin/java
  */
 public class Main {
-    private static final String ANALYZER_JAR = "jars/hijo.jar";
+    private static final int FAILURE = 1;
+
+    private static final String ANALYZER_JAR = "jars/analyzer.jar";
     private static final String ANALYZER_JAVA = "com.jkutkutorg.textAnalyzer.Analyzer";
 
     public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Please enter the java binary file to execute the JAR child processes.");
-            System.exit(1);
+            System.exit(FAILURE);
         }
         final String JAVA = args[0];
 

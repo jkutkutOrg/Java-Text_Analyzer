@@ -2,6 +2,33 @@
 
 Program to analyze different properties of a text file.
 
+## Java version:
+Amazon Corretto 18.0.2
+
+## Jar generation:
+### analyzer.jar:
+- Just make the jar file with the following file: ``Analyzer.java``
+### text_analyzer.jar:
+- Make the jar file with the following files:
+  - ``Analyzer.java``
+  - ``Main.java``
+  - ``SuperScanner.java``
+
+## How to run:
+### analyzer.jar:
+- Run the jar file with the following command:
+
+```
+java -cp jars/analyzer.jar com.jkutkutorg.textAnalyzer.Analyzer <ARGUMENTS>
+```
+
+### text_analyzer.jar:
+- Run the jar file with the following command:
+
+```
+java -cp jars/text_analyzer.jar com.jkutkutorg.textAnalyzer.Main <ARGUMENT>
+```
+
 ## Bonuses:
 - Multiple modes:
   - Vowel count.
