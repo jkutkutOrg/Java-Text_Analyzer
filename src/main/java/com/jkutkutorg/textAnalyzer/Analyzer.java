@@ -28,10 +28,10 @@ public class Analyzer {
     public static final String STD_OUTPUT = "STD_OUT";
 
     private static final Predicate<Character>[] FTS = new Predicate[] {
-            c -> inArray((Character) c, "aeiouy"),
-            c -> inArray((Character) c, "bcdfghjklmnpqrstvwxz"),
-            c -> Character.isLetter((Character) c),
-            c -> Character.isDigit((Character) c)
+        c -> inArray((Character) c, "aeiouy"),
+        c -> inArray((Character) c, "bcdfghjklmnpqrstvwxz"),
+        c -> Character.isLetter((Character) c),
+        c -> Character.isDigit((Character) c)
     };
 
     /**
@@ -67,7 +67,7 @@ public class Analyzer {
                 bw.close();
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + fileName);
+            System.err.println("Archivo no encontrado: " + fileName);
             System.exit(FAILURE);
         } catch (IOException e) {
             throw new RuntimeException(e);
