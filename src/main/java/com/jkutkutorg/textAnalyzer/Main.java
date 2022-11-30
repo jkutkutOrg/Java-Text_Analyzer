@@ -1,53 +1,89 @@
 package com.jkutkutorg.textAnalyzer;
 
+import jkutkut.SuperScanner;
+
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * Note: Enter the java executable file with an absolute path. It should be here:
+ * ~/.jdks/corretto-18.0.2/bin/java
+ */
 public class Main {
-    public static String jaimeEjec = "/snap/eclipse/61/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_17.0.3.v20220515-1416/jre/lib/jexec";
-    static Scanner sc;
+    private static final int FAILURE = 1;
+
+    private static final String ANALYZER_JAR = "jars/analyzer.jar";
+    private static final String ANALYZER_JAVA = "com.jkutkutorg.textAnalyzer.Analyzer";
+
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.err.println("Please enter the java binary file to execute the JAR child processes.");
+            System.exit(FAILURE);
+        }
+        final String JAVA = args[0];
+
+        // Obtain data from user
+        SuperScanner userInput = new SuperScanner.Es(System.in);
+        System.out.println("Please, fill the data:");
+        String archivoLectura = userInput.getFileName("- File to analyze: ");
+        System.out.println();
+        userInput.close();
+
+        Integer result;
+        for (int i = 0; i < Analyzer.OPTIONS.length; i++) {
+            result = analyze(Analyzer.OPTIONS[i], archivoLectura, JAVA);
+            if (result == null) {
+                System.err.println("Child process failed to analyze the file.");
+                break;
+            }
+            System.out.println(Analyzer.OPTIONS_NAMES[i] + ": " + result);
+        }
+    }
+
+    private static Integer analyze(String mode, String file, String java) {
+        ProcessBuilder pb = new ProcessBuilder(
+                java,
+                "-cp", ANALYZER_JAR,
+                ANALYZER_JAVA,
+                mode, file, Analyzer.STD_OUTPUT
+        );
+
+        // Arreglo de linux para subprocesos (visto y hablado en clase).
+        pb.inheritIO()
+            .redirectInput(ProcessBuilder.Redirect.PIPE)
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .redirectOutput(ProcessBuilder.Redirect.PIPE);
+
+        Integer result = null;
+
+        Scanner output = null;
+        Scanner error = null;
         try {
-            sc = new Scanner(System.in);
-
-            System.out.println("Introduce el modo");
-            String modo = sc.nextLine();
-
-            System.out.println("Introduce el nombre del archivo del que se toman los datos");
-            String archivoLectura = sc.nextLine();
-            System.out.println("Introduce como quieres que se llame el archivo de salida");
-            String archivoSalida = sc.nextLine();
-
-
-            ProcessBuilder pb = new ProcessBuilder(jaimeEjec, "/home/jaime/Documentos/WorkSpacePSP/Java-Text_Analyzer/jars/hijo.jar",modo,archivoLectura,archivoSalida);
-            pb.inheritIO().redirectInput(ProcessBuilder.Redirect.PIPE).redirectOutput(ProcessBuilder.Redirect.PIPE);
-
             Process hijo = pb.start();
+            output = new Scanner(hijo.getInputStream());
+            error = new Scanner(hijo.getErrorStream());
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(hijo.getInputStream()));
-
-
-            String error = (hijo.getErrorStream()).toString();
-
-            if (error != null) {
-
-
-                PrintStream ps = new PrintStream(hijo.getOutputStream());
-                ps.flush();
-                System.out.println(br.readLine());
+            if (error.hasNextLine()) {
+                System.err.println("Error in child:");
+                while (error.hasNextLine()) {
+                    System.err.println(error.nextLine());
+                }
             }
-            else{
-                System.out.println(error);
+            else {
+                result = output.nextInt();
             }
-
-            System.out.println("**FIN**");
-
-            sc.close();
 
         } catch (IOException e) {
-            System.out.println("IOException");
+            System.err.println("Error in child process:");
+            System.err.println("Are you sure you have the correct java binary file?");
+            System.err.println("Error: " + e.getMessage());
         }
-
-
+        finally {
+            if (output != null)
+                output.close();
+            if (error != null)
+                error.close();
+        }
+        return result;
     }
 }
