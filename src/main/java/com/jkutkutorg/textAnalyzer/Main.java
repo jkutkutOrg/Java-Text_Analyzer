@@ -8,19 +8,20 @@ import java.util.Scanner;
 /**
  * Note: Enter the java executable file with an absolute path. It should be here:
  * ~/.jdks/corretto-18.0.2/bin/java
+ * Note 2: Also enter the jar file of the Analyzer. It can be both absolute or relative.
  */
 public class Main {
     private static final int FAILURE = 1;
 
-    private static final String ANALYZER_JAR = "jars/analyzer.jar";
     private static final String ANALYZER_JAVA = "com.jkutkutorg.textAnalyzer.Analyzer";
 
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.err.println("Please enter the java binary file to execute the JAR child processes.");
+        if (args.length != 2) {
+            System.err.println("Please enter the java command and the child's jar file.");
             System.exit(FAILURE);
         }
         final String JAVA = args[0];
+        final String ANALYZER_JAR = args[1];
 
         // Obtain data from user
         SuperScanner userInput = new SuperScanner.Es(System.in);
@@ -31,7 +32,7 @@ public class Main {
 
         Integer result;
         for (int i = 0; i < Analyzer.OPTIONS.length; i++) {
-            result = analyze(Analyzer.OPTIONS[i], archivoLectura, JAVA);
+            result = analyze(Analyzer.OPTIONS[i], archivoLectura, JAVA, ANALYZER_JAR);
             if (result == null) {
                 System.err.println("Child process failed to analyze the file.");
                 break;
@@ -40,9 +41,9 @@ public class Main {
         }
     }
 
-    private static Integer analyze(String mode, String file, String java) {
+    private static Integer analyze(String mode, String file, final String JAVA, final String ANALYZER_JAR) {
         ProcessBuilder pb = new ProcessBuilder(
-                java,
+                JAVA,
                 "-cp", ANALYZER_JAR,
                 ANALYZER_JAVA,
                 mode, file, Analyzer.STD_OUTPUT
