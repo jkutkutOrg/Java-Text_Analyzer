@@ -2,6 +2,9 @@
 
 Program to analyze different properties of a text file.
 
+**Note**: Now running with Docker [here](https://github.com/jkutkutOrg/Docker4Java)
+
+
 ## Java version:
 Amazon Corretto 18.0.2
 
@@ -42,7 +45,4 @@ java -cp jars/text_analyzer.jar com.jkutkutorg.textAnalyzer.Main <ARGUMENT>
 - Analyzer able to work both as a child process and as a standalone script.
 - Analyzer can send result to stdout or to a file.
 - Data validation of all inputs given by the user.
-
-TODO
-
 - Docker environment to run the program.
